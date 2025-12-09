@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { addMeasurement } from "./src/routes/measurements.js";
+import { addMeasurement } from "./Extensions/measurements.js";
 
 const app = express();
 const port = 3000 //process.env.PORT || 8814;
