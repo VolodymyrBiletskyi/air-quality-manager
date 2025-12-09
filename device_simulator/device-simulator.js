@@ -13,7 +13,9 @@ function generateReading(){
         co2: Number((400 + Math.random() * 1000).toFixed(1)),
         temp: Number((15 + Math.random() * 15).toFixed(2)),
         humidity: Number((20 + Math.random() * 60).toFixed(2))
-        };
+
+    };
+
 }
 
 async function main() {
