@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { addMeasurement } from "./src/routes/measurements.js";
 
 const app = express();
 const port = 3000 //process.env.PORT || 8814;
@@ -12,16 +13,8 @@ app.get('/', (req, res) => {
     res.send("<h1>Sosal?</h1>");
 })
 
-app.post("/api/readings", (req, res) => {
-    const reading = req.body;
-    if(!reading.device_id){
-        return res.status(400).json({error: "device_id is required"});
-    }
+app.post("/api/measurements", addMeasurement);
 
-    memoryStorage.push(reading);
-    console.log("Received reading:", reading);
-    res.status(201).json({message: "Reading stored"});
-});
 
 app.get("/api/readings", (req, res) => {
    res.json(memoryStorage);
