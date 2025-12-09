@@ -2,10 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import { addMeasurement } from "./Extensions/measurements.js";
 
+const bodyParser = require('body-parser');
+const userRouter = require('./Controllers/UserController');
+
 const app = express();
 const port = 3000 //process.env.PORT || 8814;
 app.use(cors());
 app.use(express.json());
+app.user(bodyParser.json());
+app.use('/api', userRouter);
 
 let memoryStorage = [];
 
