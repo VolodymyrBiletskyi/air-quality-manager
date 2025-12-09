@@ -14,4 +14,19 @@ export class UserRepositoryPostgres {
         });
         return user;
     }
+    async findByEmail(email) {
+        return await prisma.user.findUnique({
+            where: { email }
+        });
+    }
+
+    async findAll() {
+        return await prisma.user.findMany();
+    }
+
+    async findById(id) {
+        return await prisma.user.findUnique({
+            where: { id: parseInt(id) }
+        });
+    }
 }
