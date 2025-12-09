@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BACKEND_URL = "http://localhost:3000/api/readings";//process.env.BACKEND_URL || 'http://localhost:3000/api/telemetry';
+const BACKEND_URL = "http://localhost:3000/api/measurements";//process.env.BACKEND_URL || 'http://localhost:3000/api/telemetry';
 const DEVICE_ID = "sensor-001";/*process.env.DEVICE_ID || "js-sim-01";*/
 const INTERVAL = 5000;//parseInt(process.env.INTERVAL || "5000");
 
