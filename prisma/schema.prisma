@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+  MANAGER
+}
+
+model User {
+  id           String      @id @default(uuid())
+  username     String
+  email        String?     @unique
+  passwordHash String
+  role         Role        @default(USER)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  devices     Device[]
+  alertRules  AlertRule[]
+}
+
+model Device {
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  ownerId      String
+  locationName String?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  owner        User          @relation(fields: [ownerId], references: [id])
+  measurements Measurement[]
+  alertRules   AlertRule[]
+  alerts       Alert[]
+}
+
+model Measurement {
+  id          Int       @id @default(autoincrement())
+  deviceId    String
+  timestamp   DateTime
+  pm2_5       Float?
+  pm10        Float?
+  co2         Float?
+  aqi         Int?
+  temperature Float?
+  humidity    Float?
+
+  device      Device    @relation(fields: [deviceId], references: [id])
+
+  @@index([deviceId, timestamp])
+}
+
+model AlertRule {
+  id            String    @id @default(uuid())
+  userId        String
+  deviceId      String?
+  name          String
+  pm2_5Threshold Float?
+  pm10Threshold  Float?
+  co2Threshold   Float?
+  aqiThreshold   Float?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id])
+  device        Device?   @relation(fields: [deviceId], references: [id])
+  alerts        Alert[]
+}
+
+model Alert {
+  id          String   @id @default(uuid())
+  alertRuleId String
+  deviceId    String
+  triggeredAt DateTime @default(now())
+  message     String?
+  isRead      Boolean  @default(false)
+
+  alertRule   AlertRule @relation(fields: [alertRuleId], references: [id])
+  device      Device    @relation(fields: [deviceId], references: [id])
+}
