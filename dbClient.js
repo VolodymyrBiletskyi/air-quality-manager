@@ -1,10 +1,12 @@
-const { Pool } = require('pg');
-
+import pkg from 'pg';
+const { Pool } = pkg;
 
 const pool = new Pool({
-    user: process.env.DB_USER || 'postgres',
+    user: process.env.DB_USER || 'admin',
     host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'air_quality',
-    password: process.env.DB_PASSWORD || 'password',
+    database: process.env.DB_NAME || 'IoTDb',
+    password: process.env.DB_PASSWORD || 'admin123',
     port: process.env.DB_PORT || 5432,
 });
+
+export default pool;

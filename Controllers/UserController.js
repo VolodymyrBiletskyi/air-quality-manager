@@ -1,11 +1,11 @@
-const express = require('express');
-const { UserService } = require('../Services/UserService');
-const { UserRepositoryPostgres } = require('../Repositories/UserRepository');
-const { parseCreateUserDto } = require('../dtos/createUserDto');
-const { toUserResponseDto } = require('../dtos/userResponseDto');
-const dbClient = require('../dbClient');
+import express from 'express';
+import { UserService } from '../Services/UserService.js';
+import { UserRepositoryPostgres } from '../Repositories/UserRepository.js';
+import { parseCreateUserDto } from '../dtos/createUserDto.js';
+import { toUserResponseDto } from '../dtos/userResponseDto.js';
+
 const router = express.Router();
-const userRepository = new UserRepositoryPostgres(dbClient);
+const userRepository = new UserRepositoryPostgres();
 const userService = new UserService(userRepository);
 
 router.post('/users', async (req, res) => {
@@ -22,4 +22,5 @@ router.post('/users', async (req, res) => {
         });
     }
 });
-module.exports = router;
+
+export default router;

@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
-class UserService {
+export class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
@@ -12,9 +12,7 @@ class UserService {
             email: userData.email,
             passwordHash: passwordHash
         };
-        const createdUser = await this.userRepository.create(userToCreate);
+        const createdUser = await this.userRepository.createUser(userToCreate);
         return createdUser;
     }
 }
-
-module.exports = { UserService };
