@@ -36,4 +36,42 @@ export class UserService {
         }
         return user;
     }
+
+    async updateUser(id, userData) {
+        const existingUser = await this.userRepository.findById(id);
+        if (!existingUser) {
+            const err = new Error('User not found');
+            err.status = 404;
+            throw err;
+        }
+
+        if (userData.email && userData.email !== existingUser.email) {
+            const emailExists = await this.userRepository.findByEmail(userData.email);
+            if (emailExists) {
+                const err = new Error('Email already in use');
+                err.status = 409;
+                err.details = ['A user with this email already exists'];
+                throw err;
+            }
+        }
+
+        const updateData = { ...userData };
+        if (userData.password) {
+            updateData.passwordHash = await bcrypt.hash(userData.password, 10);
+            delete updateData.password;
+        }
+
+        return await this.userRepository.updateUser(id, updateData);
+    }
+
+    async deleteUser(id) {
+        const existingUser = await this.userRepository.findById(id);
+        if (!existingUser) {
+            const err = new Error('User not found');
+            err.status = 404;
+            throw err;
+        }
+
+        return await this.userRepository.deleteUser(id);
+    }
 }

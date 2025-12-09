@@ -2,6 +2,7 @@ import express from 'express';
 import { UserService } from '../Services/UserService.js';
 import { UserRepositoryPostgres } from '../Repositories/UserRepository.js';
 import { parseCreateUserDto } from '../dtos/createUserDto.js';
+import { parseUpdateUserDto } from '../dtos/updateUserDto.js';
 import { toUserResponseDto } from '../dtos/userResponseDto.js';
 
 const router = express.Router();
@@ -49,6 +50,41 @@ router.get('/:id', async (req, res) => {
         const user = await userService.getUserById(req.params.id);
         const responseDto = toUserResponseDto(user);
         res.status(200).json(responseDto);
+    } catch (err) {
+        console.error(err);
+        res.status(err.status || 500).json({
+            message: err.message || 'Internal server error'
+        });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    try {
+        const updateUserDto = parseUpdateUserDto(req.body);
+        const updatedUser = await userService.updateUser(req.params.id, updateUserDto);
+        const responseDto = toUserResponseDto(updatedUser);
+        res.status(200).json(responseDto);
+    } catch (err) {
+        console.error(err);
+
+        if (err.code === 'P2002') {
+            return res.status(409).json({
+                message: 'Email already in use',
+                details: [`A user with this ${err.meta?.target?.[0] || 'field'} already exists`]
+            });
+        }
+
+        res.status(err.status || 500).json({
+            message: err.message || 'Internal server error',
+            details: err.details || undefined,
+        });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        await userService.deleteUser(req.params.id);
+        res.status(204).send();
     } catch (err) {
         console.error(err);
         res.status(err.status || 500).json({

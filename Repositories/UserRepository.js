@@ -14,6 +14,7 @@ export class UserRepositoryPostgres {
         });
         return user;
     }
+
     async findByEmail(email) {
         return await prisma.user.findUnique({
             where: { email }
@@ -26,7 +27,20 @@ export class UserRepositoryPostgres {
 
     async findById(id) {
         return await prisma.user.findUnique({
-            where: { id: parseInt(id) }
+            where: { id: id }
+        });
+    }
+
+    async updateUser(id, userData) {
+        return await prisma.user.update({
+            where: { id: id },
+            data: userData
+        });
+    }
+
+    async deleteUser(id) {
+        return await prisma.user.delete({
+            where: { id: id }
         });
     }
 }
