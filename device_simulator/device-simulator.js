@@ -1,10 +1,11 @@
-import axios from "axios"
+import axios from "axios";
+import { classifyReading } from "./aqi.js";
 
-const BACKEND_URL = "http://localhost:3000/api/measurements";//process.env.BACKEND_URL || 'http://localhost:3000/api/telemetry';
-const DEVICE_ID = "sensor-001";/*process.env.DEVICE_ID || "js-sim-01";*/
-const INTERVAL = 5000;//parseInt(process.env.INTERVAL || "5000");
+const BACKEND_URL = "http://localhost:3000/api/measurements";
+const DEVICE_ID = "sensor-001";
+const INTERVAL = 5000;
 
-function generateReading(){
+function generateReading() {
     return {
         device_id: DEVICE_ID,
         timestamp: new Date().toISOString(),
@@ -17,18 +18,41 @@ function generateReading(){
 }
 
 async function main() {
-    console.log("Device Simulator started; Sending telemetry to:", BACKEND_URL)
+    console.log("Device Simulator started; Sending telemetry to:", BACKEND_URL);
 
-    while(true){
+    while (true) {
         const payload = generateReading();
-        console.log("generated", payload);
-        try{
-            const res = await axios.post(BACKEND_URL, payload);
-            console.log("Sent: ", payload, "->", res.status);
-        }
-        catch(err){
+
+        const analysis = classifyReading({
+            pm25: payload.pm25,
+            pm10: payload.pm10,
+            co2: payload.co2
+        });
+
+        console.log("Generated:", payload);
+        console.log("AQI Analysis:", {
+            overallAQI: analysis.overallAQI,
+            category: analysis.category?.category,
+            healthConcern: analysis.category?.message,
+            dominantPollutant: analysis.dominantPollutant,
+            co2: analysis.co2Info
+        });
+        const payloadWithAQI = {
+            ...payload,
+            aqi: analysis.overallAQI,
+            category: analysis.category?.category,
+            health_message: analysis.category?.message
+        };
+
+
+
+        try {
+            const res = await axios.post(BACKEND_URL, payloadWithAQI);
+            console.log("Sent ->", res.status);
+        } catch (err) {
             console.error("Send failed", err.message);
         }
+
         await new Promise(resolve => setTimeout(resolve, INTERVAL));
     }
 }

@@ -13,6 +13,9 @@ export const addMeasurement = async (req, res) => {
             co2,
             temp,
             humidity,
+            aqi,
+            category,
+            health_message
         } = req.body;
 
         const device = await prisma.device.findUnique({
@@ -31,6 +34,9 @@ export const addMeasurement = async (req, res) => {
                 co2: co2,
                 temperature: temp,
                 humidity: humidity,
+                aqi: aqi ?? null,
+                category: category ?? null,
+                healthMessage: health_message ?? null
             },
         });
 

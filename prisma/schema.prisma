@@ -52,6 +52,8 @@ model Measurement {
   aqi         Int?
   temperature Float?
   humidity    Float?
+  category      String?
+  healthMessage String?
 
   device      Device    @relation(fields: [deviceId], references: [id])
 
