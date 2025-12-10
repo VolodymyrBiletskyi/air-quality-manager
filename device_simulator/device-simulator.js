@@ -1,9 +1,11 @@
-import axios from "axios";
+import mqtt from "mqtt";
 import { classifyReading } from "./aqi.js";
 
-const BACKEND_URL = "http://localhost:3000/api/measurements";
 const DEVICE_ID = "sensor-001";
 const INTERVAL = 5000;
+
+const BROKER_URL = "mqtt://localhost:1883";
+const TOPIC = `devices/${DEVICE_ID}/telemetry`;
 
 function generateReading() {
     return {
@@ -16,13 +18,18 @@ function generateReading() {
         humidity: Number((20 + Math.random() * 60).toFixed(2))
 
     };
-
 }
 
-async function main() {
-    console.log("Device Simulator started; Sending telemetry to:", BACKEND_URL);
+const client = mqtt.connect(BROKER_URL,{
+    clientId:DEVICE_ID,
+    username:"device",
+    password:"supersecret",
+});
 
-    while (true) {
+client.on("connect", () => {
+    console.log("Device connected to MQTT broker: ",BROKER_URL);
+
+    setInterval(() => {
         const payload = generateReading();
 
         const analysis = classifyReading({
@@ -37,26 +44,29 @@ async function main() {
             category: analysis.category?.category,
             healthConcern: analysis.category?.message,
             dominantPollutant: analysis.dominantPollutant,
-            co2: analysis.co2Info
+            co2: analysis.co2Info,
         });
         const payloadWithAQI = {
             ...payload,
             aqi: analysis.overallAQI,
             category: analysis.category?.category,
-            health_message: analysis.category?.message
+            health_message: analysis.category?.message,
+            co2_level: analysis.co2Info?.level,
+            co2_message: analysis.co2Info?.message,
         };
 
+        const json = JSON.stringify(payloadWithAQI);
 
+        client.publish(TOPIC, json, {qos: 1}, (error) => {
+            if (error) {
+                console.log("Publish error: ", error.message);
+            } else {
+                console.log(`Published to ${TOPIC}`);
+            }
+        });
+    }, INTERVAL);
+});
 
-        try {
-            const res = await axios.post(BACKEND_URL, payloadWithAQI);
-            console.log("Sent ->", res.status);
-        } catch (err) {
-            console.error("Send failed", err.message);
-        }
-
-        await new Promise(resolve => setTimeout(resolve, INTERVAL));
-    }
-}
-
-main();
+client.on("error", (error) => {
+    console.error("MQTT error:", error);
+});
