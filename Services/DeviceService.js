@@ -41,10 +41,9 @@ export class DeviceService {
         if (!existingDevice) {
             throw new Error('Device not found');
         }
-
-        await deviceRepository.deleteDevice(id);
-        return { message: 'Device deleted successfully' };
+        return deviceRepository.deleteById(existingDevice.id);
     }
+
 
     async deviceSwitch(id) {
         const existingDevice = await deviceRepository.findById(id);

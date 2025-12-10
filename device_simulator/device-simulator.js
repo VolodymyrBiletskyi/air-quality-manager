@@ -1,8 +1,7 @@
 import mqtt from "mqtt";
 import { classifyReading } from "./aqi.js";
 
-const BACKEND_URL = "http://localhost:3000/api/measurements";
-const DEVICE_ID = process.argv[2] || process.env.DEVICE_ID || "sensor-001";
+const DEVICE_ID = process.argv[2] || process.env.DEVICE_ID || "78068553-1e99-4824-aea2-0f6f90e2c0d0";
 
 const INTERVAL = 5000;
 
