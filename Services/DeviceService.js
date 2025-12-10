@@ -45,4 +45,18 @@ export class DeviceService {
         await deviceRepository.deleteDevice(id);
         return { message: 'Device deleted successfully' };
     }
+
+    async deviceSwitch(id) {
+        const existingDevice = await deviceRepository.findById(id);
+
+        if (!existingDevice) {
+            throw new Error('Device not found');
+        }
+
+        const newIsActive = !existingDevice.isActive;
+
+        const updatedDevice = await deviceRepository.updateDeviceActivity(id, newIsActive);
+
+        return new DeviceResponseDto(updatedDevice);
+    }
 }

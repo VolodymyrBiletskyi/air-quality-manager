@@ -17,7 +17,8 @@ app.use(bodyParser.json());
 app.use('/api/devices', deviceRouter);
 app.use('/api/alerts', alertRouter);
 app.use('/api/alert-rules', alertRuleRouter);
-app.use('/api', userRouter);
+app.use('/api/users', userRouter);
+
 
 let memoryStorage = [];
 
