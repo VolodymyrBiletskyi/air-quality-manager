@@ -9,7 +9,7 @@ const router = express.Router();
 const userRepository = new UserRepositoryPostgres();
 const userService = new UserService(userRepository);
 
-router.post('/users', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const createUserDto = parseCreateUserDto(req.body);
         const createdUser = await userService.createUser(createUserDto);
@@ -32,7 +32,7 @@ router.post('/users', async (req, res) => {
     }
 });
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const users = await userService.getAllUsers();
         const responseDto = users.map(user => toUserResponseDto(user));
