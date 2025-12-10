@@ -2,7 +2,7 @@ import axios from "axios";
 import { classifyReading } from "./aqi.js";
 
 const BACKEND_URL = "http://localhost:3000/api/measurements";
-const DEVICE_ID = "sensor-001";
+const DEVICE_ID = process.argv[2] || process.env.DEVICE_ID || "sensor-001";
 const INTERVAL = 5000;
 
 function generateReading() {
