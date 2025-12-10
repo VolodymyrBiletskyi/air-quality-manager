@@ -40,14 +40,34 @@ deviceRouter.put('/:id', async (req, res) => {
     }
 });
 
-deviceRouter.delete('/:id', async (req, res) => {
+deviceRouter.delete("/:id", async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const result = await deviceService.deleteDevice(req.params.id);
-        res.status(200).json(result);
+        await deviceService.deleteDevice(id);
+
+        return res.status(200).json({
+            message: "Device deleted (cascade removed measurements/alerts)",
+        });
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        console.error("Error deleting device:", error);
+
+        if (error.code === "P2025") {
+            return res.status(404).json({ error: "Device not found" });
+        }
+
+        if (error.code === "P2003") {
+            return res.status(400).json({
+                error: "Foreign key constraint failed",
+                constraint: error.meta?.constraint,
+            });
+        }
+
+        return res.status(500).json({ error: "Internal server error" });
     }
 });
+
+
 
 deviceRouter.post('/:id/switch', async (req, res) => {
     try {

@@ -19,7 +19,7 @@ export class DeviceRepositoryPostgres {
 
     async findById(id) {
         return await prisma.device.findUnique({
-            where: { id: id }
+            where: { id }
         });
     }
 
@@ -34,9 +34,9 @@ export class DeviceRepositoryPostgres {
         });
     }
 
-    async deleteDevice(id) {
-        return await prisma.device.delete({
-            where: { id: id }
+    async deleteById(id) {
+        return prisma.device.delete({
+            where: { id },
         });
     }
 
