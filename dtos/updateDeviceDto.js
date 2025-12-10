@@ -1,8 +1,9 @@
 export class UpdateDeviceDto {
     constructor(data) {
         if (data.name !== undefined) this.name = data.name;
-        if (data.location !== undefined) this.location = data.location;
-        if (data.status !== undefined) this.status = data.status;
+        if (data.description !== undefined) this.description = data.description;
+        if (data.locationName !== undefined) this.locationName = data.locationName;
+        if (data.isActive !== undefined) this.isActive = data.isActive;
 
         this.validate();
     }

@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import userRouter from './Controllers/UserController.js';
 import { addMeasurement } from "./Extensions/measurements.js";
 import deviceRouter from './Controllers/DeviceController.js';
+import alertRouter from './Controllers/AlertController.js';
+import alertRuleRouter from './Controllers/AlertRuleController.js';
+import { startMqttListener } from './mqtt-listener.js';
 
 
 const app = express();
@@ -12,7 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use('/api/devices', deviceRouter);
+app.use('/api/alerts', alertRouter);
+app.use('/api/alert-rules', alertRuleRouter);
 app.use('/api/users', userRouter);
+
 
 let memoryStorage = [];
 
@@ -26,5 +32,6 @@ app.post("/api/measurements", addMeasurement);
 app.get("/api/readings", (req, res) => {
    res.json(memoryStorage);
 });
+startMqttListener();
 
 app.listen(port, () => console.log("Backend running on http://localhost:" + port));
