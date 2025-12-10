@@ -39,4 +39,11 @@ export class DeviceRepositoryPostgres {
             where: { id: id }
         });
     }
+
+    async updateDeviceActivity(deviceId, isActive) {
+        return await prisma.device.update({
+            where: { id: deviceId },
+            data: { isActive }
+        });
+    }
 }

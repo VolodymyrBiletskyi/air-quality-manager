@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use('/api/devices', deviceRouter);
-app.use('/api', userRouter);
+app.use('/api/users', userRouter);
 
 let memoryStorage = [];
 
