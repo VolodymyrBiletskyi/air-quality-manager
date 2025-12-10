@@ -2,8 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import userRouter from './Controllers/UserController.js';
-import { addMeasurement } from "./Extensions/measurements.js";
 import deviceRouter from './Controllers/DeviceController.js';
+import measurementRouter from "./Controllers/MeasurementController.js";
 import alertRouter from './Controllers/AlertController.js';
 import alertRuleRouter from './Controllers/AlertRuleController.js';
 import { startMqttListener } from './mqtt-listener.js';
@@ -18,6 +18,7 @@ app.use('/api/devices', deviceRouter);
 app.use('/api/alerts', alertRouter);
 app.use('/api/alert-rules', alertRuleRouter);
 app.use('/api/users', userRouter);
+app.use("/api/measurements", measurementRouter);
 
 
 let memoryStorage = [];
@@ -25,9 +26,6 @@ let memoryStorage = [];
 app.get('/', (req, res) => {
     res.send("<h1>Sosal?</h1>");
 })
-
-app.post("/api/measurements", addMeasurement);
-
 
 app.get("/api/readings", (req, res) => {
    res.json(memoryStorage);
