@@ -2,8 +2,7 @@ import Joi from 'joi';
 
 const updateUserSchema = Joi.object({
     username: Joi.string().min(3).max(255).optional(),
-    email: Joi.string().email().optional(),
-    password: Joi.string().min(8).optional()
+    email: Joi.string().email().optional()
 }).min(1);
 
 export function parseUpdateUserDto(data) {
@@ -12,7 +11,7 @@ export function parseUpdateUserDto(data) {
     if (error) {
         const err = new Error('Validation failed');
         err.status = 400;
-        err.details = error.details.map(detail => detail.message);
+        err.details = error.details.map(d => d.message);
         throw err;
     }
 

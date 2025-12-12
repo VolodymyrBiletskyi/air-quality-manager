@@ -7,6 +7,7 @@ import measurementRouter from "./Controllers/MeasurementController.js";
 import alertRouter from './Controllers/AlertController.js';
 import alertRuleRouter from './Controllers/AlertRuleController.js';
 import { startMqttListener } from './mqtt-listener.js';
+import authRoutes from './Controllers/AuthController.js';
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/api/alerts', alertRouter);
 app.use('/api/alert-rules', alertRuleRouter);
 app.use('/api/users', userRouter);
 app.use("/api/measurements", measurementRouter);
+app.use('/api/auth', authRoutes);
 
 
 let memoryStorage = [];

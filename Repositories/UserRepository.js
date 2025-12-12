@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export class UserRepositoryPostgres {
+export class UserRepository {
     async createUser(userData) {
         const { username, passwordHash, email } = userData;
         const user = await prisma.user.create({

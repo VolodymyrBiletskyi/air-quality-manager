@@ -56,13 +56,13 @@ export class UserService {
         }
 
         const updateData = { ...userData };
-        if (userData.password) {
-            updateData.passwordHash = await bcrypt.hash(userData.password, 10);
-            delete updateData.password;
-        }
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === undefined) delete updateData[key];
+        });
 
-        return await this.userRepository.updateUser(id, updateData);
+        return this.userRepository.updateUser(id, updateData);
     }
+
 
     async deleteUser(id) {
         const existingUser = await this.userRepository.findById(id);

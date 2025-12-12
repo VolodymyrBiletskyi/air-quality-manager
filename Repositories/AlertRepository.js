@@ -68,4 +68,20 @@ export class AlertRepository {
             where: { id }
         });
     }
+
+    async findByDeviceIdForUser(deviceId, userId) {
+        return prisma.alert.findMany({
+            where: {
+                deviceId,
+                alertRule: {
+                    userId,
+                },
+            },
+            orderBy: { triggeredAt: 'desc' },
+            include: {
+                alertRule: true,
+                device: true,
+            },
+        });
+    }
 }

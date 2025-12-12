@@ -1,12 +1,14 @@
-export class DeviceResponseDto {
-    constructor(device) {
-        this.id = device.id;
-        this.name = device.name;
-        this.description = device.description;
-        this.ownerId = device.ownerId;
-        this.locationName = device.locationName;
-        this.isActive = device.isActive;
-        this.createdAt = device.createdAt;
-        this.updatedAt = device.updatedAt;
-    }
+export function DeviceResponseDto(device) {
+    if (!device) return null;
+
+    return {
+        id: device.id,
+        name: device.name,
+        description: device.description,
+        ownerId: device.ownerId,
+        locationName: device.locationName,
+        isActive: device.isActive,
+        createdAt: device.createdAt,
+        updatedAt: device.updatedAt,
+    };
 }

@@ -27,7 +27,7 @@ measurementRouter.get("/", async (req, res) => {
     }
 });
 
-measurementRouter.get("/device/:deviceId", async (req, res) => {
+measurementRouter.get("/:deviceId", async (req, res) => {
     try {
         const items = await measurementService.getByDevice(
             req.params.deviceId,
