@@ -2,6 +2,7 @@ import { AlertRepository } from '../Repositories/AlertRepository.js';
 import { CreateAlertDto } from '../dtos/createAlertDto.js';
 import { UpdateAlertDto } from '../dtos/updateAlertDto.js';
 import { AlertResponseDto } from '../dtos/alertResponseDto.js';
+import { toAlertByDeviceDto } from '../dtos/toAlertByDeviceDto.js';
 
 const alertRepository = new AlertRepository();
 
@@ -44,5 +45,25 @@ export class AlertService {
 
         await alertRepository.deleteAlert(id);
         return { message: 'Alert deleted successfully' };
+    }
+
+    async getAlertsByDeviceIdForUser(deviceId, userId) {
+        if (!deviceId) {
+            const err = new Error('deviceId is required');
+            err.status = 400;
+            throw err;
+        }
+
+        const uuidRegex =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+        if (!uuidRegex.test(deviceId)) {
+            const err = new Error('Invalid deviceId format');
+            err.status = 400;
+            throw err;
+        }
+
+        const alerts = await alertRepository.findByDeviceIdForUser(deviceId, userId);
+        return alerts.map(toAlertByDeviceDto);
     }
 }

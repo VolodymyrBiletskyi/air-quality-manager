@@ -1,12 +1,13 @@
 import express from 'express';
 import { UserService } from '../Services/UserService.js';
-import { UserRepositoryPostgres } from '../Repositories/UserRepository.js';
+import { UserRepository } from '../Repositories/UserRepository.js';
 import { parseCreateUserDto } from '../dtos/createUserDto.js';
 import { parseUpdateUserDto } from '../dtos/updateUserDto.js';
 import { toUserResponseDto } from '../dtos/userResponseDto.js';
+import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
-const userRepository = new UserRepositoryPostgres();
+const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 
 router.post('/', async (req, res) => {
@@ -45,6 +46,19 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/me', authMiddleware, async (req, res) => {
+    try {
+        const user = await userService.getUserById(req.user.id);
+        return res.status(200).json(toUserResponseDto(user));
+    } catch (err) {
+        console.error(err);
+        return res.status(err.status || 500).json({
+            message: err.message || 'Internal server error',
+            details: err.details || undefined,
+        });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const user = await userService.getUserById(req.params.id);
@@ -58,25 +72,29 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.patch('/patch', authMiddleware, async (req, res) => {
     try {
         const updateUserDto = parseUpdateUserDto(req.body);
-        const updatedUser = await userService.updateUser(req.params.id, updateUserDto);
-        const responseDto = toUserResponseDto(updatedUser);
-        res.status(200).json(responseDto);
+
+        const updatedUser = await userService.updateUser(
+            req.user.id,
+            updateUserDto
+        );
+
+        res.status(200).json(toUserResponseDto(updatedUser));
     } catch (err) {
         console.error(err);
 
         if (err.code === 'P2002') {
             return res.status(409).json({
                 message: 'Email already in use',
-                details: [`A user with this ${err.meta?.target?.[0] || 'field'} already exists`]
+                details: ['A user with this email already exists']
             });
         }
 
         res.status(err.status || 500).json({
             message: err.message || 'Internal server error',
-            details: err.details || undefined,
+            details: err.details
         });
     }
 });
@@ -92,5 +110,9 @@ router.delete('/:id', async (req, res) => {
         });
     }
 });
+
+
+
+
 
 export default router;
