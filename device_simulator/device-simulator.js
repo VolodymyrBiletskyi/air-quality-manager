@@ -1,5 +1,9 @@
+import { config } from 'dotenv';
+config();
 import mqtt from "mqtt";
 import { classifyReading } from "./aqi.js";
+
+const BROKER_URL = process.env.BROKER_URL;
 
 const DEVICE_ID = process.argv[2] || process.env.DEVICE_ID;
 if (!DEVICE_ID) {
@@ -9,7 +13,7 @@ if (!DEVICE_ID) {
 
 const INTERVAL = Number(process.env.INTERVAL_MS || 5000);
 
-const BROKER_URL = process.env.BROKER_URL || "mqtt://localhost:1883";
+
 
 const TELEMETRY_TOPIC = `devices/${DEVICE_ID}/telemetry`;
 

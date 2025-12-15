@@ -24,6 +24,23 @@ alertRouter.get('/', async (req, res) => {
     }
 });
 
+alertRouter.get('/device/:deviceId', authMiddleware, async (req, res) => {
+    try {
+        const { deviceId } = req.params;
+
+        const alerts = await alertService.getAlertsByDeviceIdForUser(deviceId, req.user.id);
+
+        return res.status(200).json(alerts);
+    } catch (err) {
+        console.error('Error fetching alerts:', err);
+
+        return res.status(err.status || 500).json({
+            message: err.message || 'Internal server error',
+            details: err.details || undefined,
+        });
+    }
+});
+
 alertRouter.get('/:id', async (req, res) => {
     try {
         const alert = await alertService.getAlertById(req.params.id);
@@ -51,21 +68,6 @@ alertRouter.delete('/:id', async (req, res) => {
     }
 });
 
-alertRouter.get('/device/:deviceId', authMiddleware, async (req, res) => {
-    try {
-        const { deviceId } = req.params;
 
-        const alerts = await alertService.getAlertsByDeviceIdForUser(deviceId, req.user.id);
-
-        return res.status(200).json(alerts);
-    } catch (err) {
-        console.error('Error fetching alerts:', err);
-
-        return res.status(err.status || 500).json({
-            message: err.message || 'Internal server error',
-            details: err.details || undefined,
-        });
-    }
-});
 
 export default alertRouter;
