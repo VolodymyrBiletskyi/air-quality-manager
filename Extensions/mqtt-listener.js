@@ -41,7 +41,7 @@ export function startMqttListener() {
 
             console.log("Measurement saved from MQTT, id:", saved.id);
 
-            await checkAlertRules(raw); // или saved, как удобнее
+            await checkAlertRules(raw);
         } catch (error) {
             console.error("Error processing message:", error);
         }

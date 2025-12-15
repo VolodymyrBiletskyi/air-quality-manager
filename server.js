@@ -6,7 +6,7 @@ import deviceRouter from './Controllers/DeviceController.js';
 import measurementRouter from "./Controllers/MeasurementController.js";
 import alertRouter from './Controllers/AlertController.js';
 import alertRuleRouter from './Controllers/AlertRuleController.js';
-import { startMqttListener } from './MQTT/mqtt-listener.js';
+import { startMqttListener } from './Extensions/mqtt-listener.js';
 import authRoutes from './Controllers/AuthController.js';
 
 
