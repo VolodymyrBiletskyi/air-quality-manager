@@ -130,20 +130,4 @@ export class DeviceService {
         return { message: 'Device deleted successfully' };
     }
 
-    async deviceSwitch(id) {
-        const existingDevice = await deviceRepository.findById(id);
-
-        if (!existingDevice) {
-            throw new Error("Device not found");
-        }
-        const newIsActive = !existingDevice.isActive;
-
-        const updatedDevice = await deviceRepository.updateDeviceActivity(id, newIsActive);
-
-        const commandTopic = `devices/${id}/commands`;
-        await mqttPublisher.publish(commandTopic, { action: newIsActive ? "ON" : "OFF" }, { qos: 1, retain: true });
-
-
-        return DeviceResponseDto(updatedDevice);
-    }
 }

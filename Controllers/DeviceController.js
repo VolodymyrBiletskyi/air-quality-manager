@@ -122,21 +122,4 @@ deviceRouter.delete('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-deviceRouter.post('/:id/switch', authMiddleware, async (req, res) => {
-    const id = req.params.id;
-
-    try {
-        const result = await deviceService.deviceSwitch(id);
-        return res.status(200).json(result);
-    } catch (error) {
-        console.error('Error switching device activity:', error);
-
-        if (error.message === 'Device not found') {
-            return res.status(404).json({ error: error.message });
-        }
-
-        return res.status(400).json({ error: error.message });
-    }
-});
-
 export default deviceRouter;
