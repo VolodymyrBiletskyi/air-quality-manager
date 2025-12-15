@@ -2,15 +2,43 @@ services:
   db:
     image: postgres:15
     container_name: iotdb
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: IoTDb
-    ports:
-      - "5433:5432"
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin123}
+      POSTGRES_DB: ${POSTGRES_DB:-IoTDb}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks: [aqm]
+
+  mqtt:
+    build: ./mqtt-broker
+    container_name: aqm-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    networks: [aqm]
+
+  api:
+    build: ./api
+    container_name: aqm-api
+    restart: unless-stopped
+    env_file: ./.env
+    depends_on: [db, mqtt]
+    ports:
+      - "3000:3000"
+    networks: [aqm]
+
+  device:
+    build: ./device
+    container_name: aqm-device
+    restart: unless-stopped
+    env_file: ./.env
+    depends_on: [mqtt]
+    networks: [aqm]
 
 volumes:
   postgres_data:
+
+networks:
+  aqm:
