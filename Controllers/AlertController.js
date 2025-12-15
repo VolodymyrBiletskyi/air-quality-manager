@@ -1,6 +1,6 @@
 import express from 'express';
 import { AlertService } from '../Services/AlertService.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import { authMiddleware } from '../Middleware/AuthMiddleware.js';
 
 const alertService = new AlertService();
 const alertRouter = express.Router();

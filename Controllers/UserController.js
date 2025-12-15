@@ -4,7 +4,7 @@ import { UserRepository } from '../Repositories/UserRepository.js';
 import { parseCreateUserDto } from '../dtos/createUserDto.js';
 import { parseUpdateUserDto } from '../dtos/updateUserDto.js';
 import { toUserResponseDto } from '../dtos/userResponseDto.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import { authMiddleware } from '../Middleware/AuthMiddleware.js';
 
 const router = express.Router();
 const userRepository = new UserRepository();
