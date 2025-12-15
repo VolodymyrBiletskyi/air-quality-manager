@@ -1,6 +1,6 @@
 import { MeasurementRepository } from "../Repositories/MeasurementRepository.js";
-import { measurementPayloadDTO } from "../dtos/MeasurementPayloadDTO.js";
-import { measurementQueryDTO } from "../dtos/MeasurementQueryDTO.js";
+import { measurementPayloadDTO } from "../dtos/MeasurementPayloadDto.js";
+import { measurementQueryDTO } from "../dtos/MeasurementQueryDto.js";
 import { measurementUpdateDto } from "../dtos/measurementUpdateDto.js";
 
 export class MeasurementService {

@@ -12,29 +12,22 @@ services:
     networks: [aqm]
 
   mqtt:
-    build: ./mqtt-broker
+    build: ./MQTT/Broker
     container_name: aqm-mqtt
     restart: unless-stopped
+    env_file: ./.env
     ports:
       - "1883:1883"
     networks: [aqm]
 
   api:
-    build: ./api
+    build: .
     container_name: aqm-api
     restart: unless-stopped
     env_file: ./.env
     depends_on: [db, mqtt]
     ports:
       - "3000:3000"
-    networks: [aqm]
-
-  device:
-    build: ./device
-    container_name: aqm-device
-    restart: unless-stopped
-    env_file: ./.env
-    depends_on: [mqtt]
     networks: [aqm]
 
 volumes:

@@ -1,6 +1,6 @@
 import express from 'express';
 import { DeviceService } from '../Services/DeviceService.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import { authMiddleware } from '../Middleware/AuthMiddleware.js';
 
 const deviceService = new DeviceService();
 const deviceRouter = express.Router();

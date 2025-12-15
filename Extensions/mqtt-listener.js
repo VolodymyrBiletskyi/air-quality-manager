@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const alertService = new AlertService();
 const measurementService = new MeasurementService();
 
-const BROKER_URL = "mqtt://localhost:1883";
+const BROKER_URL = process.env.BROKER_URL;
 const TOPIC = "devices/+/telemetry";
 
 export function startMqttListener() {

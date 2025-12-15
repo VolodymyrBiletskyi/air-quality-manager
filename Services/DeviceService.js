@@ -141,7 +141,8 @@ export class DeviceService {
         const updatedDevice = await deviceRepository.updateDeviceActivity(id, newIsActive);
 
         const commandTopic = `devices/${id}/commands`;
-        await mqttPublisher.publish(commandTopic, { action: newIsActive ? "ON" : "OFF" });
+        await mqttPublisher.publish(commandTopic, { action: newIsActive ? "ON" : "OFF" }, { qos: 1, retain: true });
+
 
         return DeviceResponseDto(updatedDevice);
     }
