@@ -123,11 +123,7 @@ deviceRouter.delete('/:id', authMiddleware, async (req, res) => {
 });
 
 deviceRouter.post('/:id/switch', authMiddleware, async (req, res) => {
-    const id = Number(req.params.id);
-
-    if (Number.isNaN(id)) {
-        return res.status(400).json({ error: 'Invalid device id' });
-    }
+    const id = req.params.id;
 
     try {
         const result = await deviceService.deviceSwitch(id);

@@ -1,7 +1,9 @@
 import { DeviceRepositoryPostgres } from '../Repositories/DeviceRepository.js';
 import { DeviceResponseDto } from '../dtos/deviceResponseDto.js';
+import { MqttPublisher } from "../Extensions/MqttPublisher.js";
 
 const deviceRepository = new DeviceRepositoryPostgres();
+const mqttPublisher = new MqttPublisher();
 
 export class DeviceService {
     validateCreateDeviceData(deviceData) {
@@ -132,12 +134,14 @@ export class DeviceService {
         const existingDevice = await deviceRepository.findById(id);
 
         if (!existingDevice) {
-            throw new Error('Device not found');
+            throw new Error("Device not found");
         }
-
         const newIsActive = !existingDevice.isActive;
 
         const updatedDevice = await deviceRepository.updateDeviceActivity(id, newIsActive);
+
+        const commandTopic = `devices/${id}/commands`;
+        await mqttPublisher.publish(commandTopic, { action: newIsActive ? "ON" : "OFF" });
 
         return DeviceResponseDto(updatedDevice);
     }
