@@ -1,7 +1,7 @@
 import mqtt from "mqtt";
 import { PrismaClient } from "@prisma/client";
-import { AlertService } from "./Services/AlertService.js";
-import { MeasurementService } from "./Services/MeasurementService.js";
+import { AlertService } from "../Services/AlertService.js";
+import { MeasurementService } from "../Services/MeasurementService.js";
 
 const prisma = new PrismaClient();
 const alertService = new AlertService();
