@@ -149,10 +149,9 @@ export class MeasurementRepository {
     async delete(id) {
         try {
             return await prisma.measurement.delete({
-                where: { id: Number(id) }
+                where: { id: id }
             });
         } catch (err) {
-            // если не найдено — вернём null
             if (err.code === "P2025") {
                 return null;
             }

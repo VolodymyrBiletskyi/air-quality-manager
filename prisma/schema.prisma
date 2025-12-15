@@ -43,7 +43,7 @@ model Device {
 }
 
 model Measurement {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   deviceId    String
   timestamp   DateTime
   pm2_5       Float?
