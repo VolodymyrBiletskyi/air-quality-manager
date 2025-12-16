@@ -9,7 +9,6 @@ export function toAlertByDeviceDto(alert) {
 
         triggeredAt: alert.triggeredAt ? alert.triggeredAt.toISOString() : null,
 
-        // опционально: часть данных правила
         alertRule: alert.alertRule
             ? {
                 id: alert.alertRule.id,

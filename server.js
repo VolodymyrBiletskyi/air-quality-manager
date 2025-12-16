@@ -8,6 +8,8 @@ import alertRouter from './Controllers/AlertController.js';
 import alertRuleRouter from './Controllers/AlertRuleController.js';
 import { startMqttListener } from './Extensions/mqtt-listener.js';
 import authRoutes from './Controllers/AuthController.js';
+import { config } from 'dotenv';
+config();
 
 
 const app = express();
