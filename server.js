@@ -27,10 +27,6 @@ app.use('/api/auth', authRoutes);
 
 let memoryStorage = [];
 
-app.get('/', (req, res) => {
-    res.send("<h1>Sosal?</h1>");
-})
-
 app.get("/api/readings", (req, res) => {
    res.json(memoryStorage);
 });

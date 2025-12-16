@@ -1,15 +1,16 @@
 services:
   db:
     image: postgres:15
-    container_name: iotdb
+    container_name: aqm-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-admin}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin123}
-      POSTGRES_DB: ${POSTGRES_DB:-IoTDb}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: IoTDb
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks: [aqm]
+    ports:
+      - "5433:5432"
 
   mqtt:
     build: ./MQTT/Broker
