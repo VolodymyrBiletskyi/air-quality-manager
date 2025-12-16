@@ -54,12 +54,12 @@ export class DeviceService {
         const devices = await deviceRepository.findAll();
         return devices.map(DeviceResponseDto);
     }
-    async getAllDevicesByUserId(userId) {
-        const existingUser = await userRepository.findById(userId);
+    async getAllDevicesByUserId(ownerId) {
+        const existingUser = await userRepository.findById(ownerId);
         if (!existingUser) {
             throw new Error('User not found');
         }
-        const devices = await deviceRepository.findByUserId(userId);
+        const devices = await deviceRepository.findByUserId(ownerId);
         return devices.map(DeviceResponseDto);
     }
 

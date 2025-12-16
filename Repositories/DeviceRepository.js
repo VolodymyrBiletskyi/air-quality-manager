@@ -22,9 +22,9 @@ export class DeviceRepositoryPostgres {
             where: { id }
         });
     }
-    async findByUserId(userId) {
+    async findByUserId(ownerId) {
         return prisma.device.findMany({
-            where: { userId }
+            where: { ownerId }
         });
     }
 
