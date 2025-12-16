@@ -39,7 +39,7 @@ deviceRouter.get('/all', async (req, res) => {
 });
 
 deviceRouter.get('/user-devices', authMiddleware, async (req, res) => {
-    const id = req.params.id;
+    const userId = req.params.id;
     try {
         const devices = await deviceService.getAllDevicesByUserId(userId);
         return res.status(200).json(devices);
