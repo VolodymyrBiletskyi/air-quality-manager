@@ -52,6 +52,10 @@ export class DeviceService {
         const devices = await deviceRepository.findAll();
         return devices.map(DeviceResponseDto);
     }
+    async getAllDevicesByUserId() {
+        const devices = await deviceRepository.findByUserId();
+        return devices.map(DeviceResponseDto);
+    }
 
     validatePatchDeviceData(deviceData) {
         const errors = [];

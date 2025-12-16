@@ -22,6 +22,12 @@ export class DeviceRepositoryPostgres {
             where: { id }
         });
     }
+    async findByUserId(userId) {
+        return prisma.device.findMany({
+            where: { userId }
+        });
+    }
+
 
     async findAll() {
         return await prisma.device.findMany();
