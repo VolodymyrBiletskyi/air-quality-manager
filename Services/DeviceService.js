@@ -60,6 +60,9 @@ export class DeviceService {
             throw new Error('User not found');
         }
         const devices = await deviceRepository.findByUserId(ownerId);
+        if(devices == null){
+            throw new Error('User does not have devices yet');
+        }
         return devices.map(DeviceResponseDto);
     }
 
