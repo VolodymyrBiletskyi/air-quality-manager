@@ -1,8 +1,10 @@
 import { DeviceRepositoryPostgres } from '../Repositories/DeviceRepository.js';
+import { UserRepository } from '../Repositories/UserRepository.js';
 import { DeviceResponseDto } from '../dtos/deviceResponseDto.js';
 import { MqttPublisher } from "../Extensions/MqttPublisher.js";
 
 const deviceRepository = new DeviceRepositoryPostgres();
+const userRepository = new UserRepository();
 const mqttPublisher = new MqttPublisher();
 
 export class DeviceService {
@@ -52,8 +54,12 @@ export class DeviceService {
         const devices = await deviceRepository.findAll();
         return devices.map(DeviceResponseDto);
     }
-    async getAllDevicesByUserId() {
-        const devices = await deviceRepository.findByUserId();
+    async getAllDevicesByUserId(userId) {
+        const existingUser = await userRepository.findById(userId);
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+        const devices = await deviceRepository.findByUserId(userId);
         return devices.map(DeviceResponseDto);
     }
 
