@@ -1,57 +1,4 @@
-#Local dockercompose
-#
-##services:
-##  db:
-##    image: postgres:15
-##    container_name: aqm-db
-##    restart: unless-stopped
-##    environment:
-##      POSTGRES_USER: admin
-##      POSTGRES_PASSWORD: admin123
-##      POSTGRES_DB: IoTDb
-##    volumes:
-##      - postgres_data:/var/lib/postgresql/data
-##    ports:
-##      - "5433:5432"
-##    networks: [aqm]
-##
-##  mqtt:
-##    build: ./Broker
-##    container_name: aqm-mqtt
-##    restart: unless-stopped
-##    env_file: ./.env
-##    ports:
-##      - "1883:1883"
-##    networks: [aqm]
-##
-##  api:
-##    build: .
-##    container_name: aqm-api
-##    restart: unless-stopped
-##    env_file: ./.env
-##    depends_on: [db, mqtt]
-##    expose:
-##      - "3000"
-##    networks: [aqm]
-##
-##  nginx:
-##    image: nginx:1.27-alpine
-##    container_name: aqm-nginx
-##    restart: unless-stopped
-##    depends_on: [api]
-##    ports:
-##      - "80:80"
-##      - "443:443"
-##    volumes:
-##      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-##      - ./infra/nginx/certs:/etc/nginx/certs:ro
-##    networks: [aqm]
-##
-##volumes:
-##  postgres_data:
-##
-##networks:
-##  aqm:
+version: "3.9"
 
 services:
   api:
@@ -68,7 +15,8 @@ services:
     image: nginx:1.27-alpine
     container_name: aqm-nginx
     restart: unless-stopped
-    depends_on: [api]
+    depends_on:
+      - api
     ports:
       - "80:80"
       - "443:443"
