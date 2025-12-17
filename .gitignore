@@ -3,3 +3,4 @@
 node_modules
 package-lock.json
 /generated/prisma
+infra/nginx/certs/
