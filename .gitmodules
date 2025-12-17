@@ -1,0 +1,9 @@
+[submodule "Broker"]
+	path = Broker
+	url = https://github.com/VolodymyrBiletskyi/MQTT-broker.git
+[submodule "DockerDb"]
+	path = DockerDb
+	url = https://github.com/VolodymyrBiletskyi/docker-db.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/OleksandrPass/iot-device-metrics.git
