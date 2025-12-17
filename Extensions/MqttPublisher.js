@@ -2,7 +2,7 @@ import mqtt from "mqtt";
 
 export class MqttPublisher {
     constructor() {
-        this.url = process.env.MQTT_URL;
+        this.url = process.env.BROKER_URL;
         this.username = process.env.MQTT_USER || "api";
         this.password = process.env.MQTT_PASS || "apisecret";
 

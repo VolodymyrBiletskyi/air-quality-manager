@@ -3,9 +3,9 @@ config();
 import mqtt from "mqtt";
 import { classifyReading } from "./aqi.js";
 
-const BROKER_URL = "mqtt://172.161.145.151:1883";
+const BROKER_URL = process.env.MQTT_URL;
 
-const DEVICE_ID = process.argv[2] || process.env.DEVICE_ID || "";
+const DEVICE_ID = process.argv[2] || "";
 if (!DEVICE_ID) {
     console.error("DEVICE_ID is required. Usage: node device-simulator.js <deviceId>");
     process.exit(1);
