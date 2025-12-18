@@ -22,6 +22,15 @@ export class AlertRuleRepository {
             }
         });
     }
+    async findByUserId(userId) {
+        return await prisma.alertRule.findMany({
+            where: { userId },
+            include: {
+                user: true,
+                device: true
+            }
+        });
+    }
 
     async findAll(filters = {}) {
         const where = {};

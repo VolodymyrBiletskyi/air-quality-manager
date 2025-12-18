@@ -1,5 +1,6 @@
 import express from 'express';
 import { AlertRuleService } from '../Services/AlertRuleService.js';
+import {authMiddleware} from "../Middleware/AuthMiddleware.js";
 
 const alertRuleService = new AlertRuleService();
 const alertRuleRouter = express.Router();
@@ -24,6 +25,16 @@ alertRuleRouter.get('/', async (req, res) => {
         res.status(200).json(alertRules);
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+alertRuleRouter.get('/:userId', authMiddleware, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const alertRules = await alertRuleService.getAllAlertRulesbyUser(userId);
+        return res.status(200).json(alertRules);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
     }
 });
 

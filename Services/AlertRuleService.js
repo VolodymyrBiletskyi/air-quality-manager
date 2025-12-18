@@ -24,6 +24,15 @@ export class AlertRuleService {
         const alertRules = await alertRuleRepository.findAll(filters);
         return alertRules.map(rule => new AlertRuleResponseDto(rule));
     }
+    async getAllAlertRulesbyUser(userId) {
+        const existingUser = await alertRuleRepository.findByUserId(userId);
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+        const alertRules = await alertRuleRepository.findByUserId(userId);
+
+        return alertRules.map(rule => new AlertRuleResponseDto(rule));
+    }
 
     async updateAlertRule(id, alertRuleData) {
         const existingAlertRule = await alertRuleRepository.findById(id);
